@@ -1,7 +1,13 @@
 ﻿<Window x:Class="Newest_unaswered_by_tags.SettingsWindow"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	Title="Settings" SizeToContent="Height" Loaded="Window_Loaded" Width="250">
+	Title="Settings" SizeToContent="WidthAndHeight" Loaded="Window_Loaded">
+	<Window.Resources>
+		<Style TargetType="FrameworkElement" BasedOn="{StaticResource margin}" x:Key="label">
+			<Setter Property="HorizontalAlignment" Value="Right" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
@@ -11,7 +17,23 @@
 			<RowDefinition />
 			<RowDefinition />
 		</Grid.RowDefinitions>
-		<TextBox Style="{StaticResource margin}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Name="tagsTextBox" />
+		<Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<TextBlock Style="{StaticResource label}" Grid.Row="0" Grid.Column="0">Site</TextBlock>
+			<ComboBox Style="{StaticResource margin}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Name="siteComboBox" Width="100" />
+			<TextBlock Style="{StaticResource label}" Grid.Row="1" Grid.Column="0">Tags</TextBlock>
+			<TextBox Style="{StaticResource margin}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Name="tagsTextBox" Width="250" />
+			<TextBlock Style="{StaticResource label}" Grid.Row="2" Grid.Column="0">Max. pages to load</TextBlock>
+			<TextBox Style="{StaticResource margin}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Name="maxPagesToLoadTextBox" Width="100" />
+		</Grid>
 		<Button Grid.Column="0" Grid.Row="1" Style="{StaticResource margin}" Click="Ok_Click">OK</Button>
 		<Button Grid.Column="1" Grid.Row="1" Style="{StaticResource margin}" Click="Cancel_Click">Cancel</Button>
 	</Grid>

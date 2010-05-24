@@ -6,9 +6,6 @@
 	<Window.Resources>
 		<local:IdToUrlConverter x:Key="idToUrl" />
 		<local:EnumerableToStringConverter x:Key="enumerableToString" />
-		<Style TargetType="FrameworkElement" x:Key="center">
-			<Setter Property="VerticalAlignment" Value="Center" />
-		</Style>
 	</Window.Resources>
 	<DockPanel>
 		<TextBlock Name="StatusBar" DockPanel.Dock="Bottom" Style="{StaticResource margin}" />
@@ -20,7 +17,7 @@
 			</Grid.ColumnDefinitions>
 			<Button Grid.Column="0" Style="{StaticResource margin}" Click="Refresh_Click">Refresh</Button>
 			<Button Grid.Column="1" Style="{StaticResource margin}" Click="More_Click">More</Button>
-			<Button Grid.Column="2" Style="{StaticResource margin}" Click="SetTags_Click">Set tags</Button>
+			<Button Grid.Column="2" Style="{StaticResource margin}" Click="SetTags_Click">Settings</Button>
 		</Grid>
 		<DataGrid Name="questionsGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" HeadersVisibility="Column" RowHeaderWidth="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" IsReadOnly="True">
 			<DataGrid.Columns>

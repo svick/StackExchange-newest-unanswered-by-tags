@@ -60,9 +60,13 @@ namespace Newest_unaswered_by_tags
 		{
 			SettingsWindow window = new SettingsWindow();
 			window.Tags = Settings.Default.Tags;
+			window.Site = Settings.Default.Site;
+			window.MaxPagesToLoad = Settings.Default.MaxPagesToLoad;
 			if (window.ShowDialog() == true)
 			{
 				Settings.Default.Tags = window.Tags;
+				Settings.Default.Site = window.Site;
+				Settings.Default.MaxPagesToLoad = window.MaxPagesToLoad;
 				Settings.Default.Save();
 				Reload();
 			}

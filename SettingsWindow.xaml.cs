@@ -24,7 +24,17 @@ namespace Newest_unaswered_by_tags
 			InitializeComponent();
 		}
 
+		public StackOverflow.HostSite Site
+		{
+			get;
+			set;
+		}
 		public StringCollection Tags
+		{
+			get;
+			set;
+		}
+		public int MaxPagesToLoad
 		{
 			get;
 			set;
@@ -32,8 +42,19 @@ namespace Newest_unaswered_by_tags
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
+			ok();
+		}
+
+		void ok()
+		{
 			Tags.Clear();
 			Tags.AddRange(tagsTextBox.Text.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+
+			Site = (StackOverflow.HostSite)siteComboBox.SelectedItem;
+
+			int pages;
+			if (int.TryParse(maxPagesToLoadTextBox.Text, out pages))
+				MaxPagesToLoad = pages;
 
 			DialogResult = true;
 		}
@@ -45,7 +66,12 @@ namespace Newest_unaswered_by_tags
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
+			siteComboBox.ItemsSource = Enum.GetValues(typeof(StackOverflow.HostSite));
+			siteComboBox.SelectedItem = Site;
+
 			tagsTextBox.Text = string.Join(" ", Tags.Cast<string>());
+
+			maxPagesToLoadTextBox.Text = MaxPagesToLoad.ToString();
 		}
 	}
 }

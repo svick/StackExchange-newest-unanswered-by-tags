@@ -9,5 +9,8 @@
 		<Style TargetType="FrameworkElement" x:Key="margin">
 			<Setter Property="Margin" Value="5" />
 		</Style>
+		<Style TargetType="FrameworkElement" x:Key="center">
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
 	</Application.Resources>
 </Application>
