@@ -73,8 +73,10 @@ namespace Newest_unaswered_by_tags
 			SetTagsWindow window = new SetTagsWindow();
 			window.Tags = Tags;
 			if (window.ShowDialog() == true)
+			{
 				Tags = window.Tags;
-			Reload();
+				Reload();
+			}
 		}
 
 		void LoadNextPage()
