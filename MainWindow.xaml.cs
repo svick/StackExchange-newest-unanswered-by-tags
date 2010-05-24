@@ -24,7 +24,7 @@ namespace Newest_unaswered_by_tags
 	{
 		const string fileName = "tags.txt";
 
-		string[] tags;
+		string[] tags = new string[0];
 		string[] Tags
 		{
 			get
@@ -33,7 +33,10 @@ namespace Newest_unaswered_by_tags
 			}
 			set
 			{
-				tags = value;
+				if (value == null)
+					tags = new string[0];
+				else
+					tags = value;
 				File.WriteAllLines(fileName, tags);
 			}
 		}
@@ -81,8 +84,12 @@ namespace Newest_unaswered_by_tags
 
 		void LoadNextPage()
 		{
-			questions.AddRange(getQuestions(nextPage++));
-			questionsGrid.Items.Refresh();
+			int oldCount = questions.Count;
+			do
+			{
+				questions.AddRange(getQuestions(nextPage++));
+				questionsGrid.Items.Refresh();
+			} while (questions.Count == oldCount);
 		}
 
 		void Reload()
@@ -94,10 +101,15 @@ namespace Newest_unaswered_by_tags
 
 		IEnumerable<Question> getQuestions(int page)
 		{
-			return client.GetQuestions(
+			var questions = client.GetQuestions(
 				sortBy: QuestionSort.UnansweredNewest,
 				pageSize: 100,
-				page: page).Where(q => q.Tags.Any(tag => Tags.Contains(tag)));
+				page: page);
+
+			if (Tags.Any())
+				questions = questions.Where(q => q.Tags.Any(tag => Tags.Contains(tag)));
+
+			return questions;
 		}
 	}
 }
