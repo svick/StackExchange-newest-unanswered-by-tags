@@ -1,0 +1,60 @@
+﻿<Window x:Class="Newest_unaswered_by_tags.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="clr-namespace:Newest_unaswered_by_tags"
+  Title="Newest unaswered by tags" Height="400" Width="600">
+	<Window.Resources>
+		<local:IdToUrlConverter x:Key="idToUrl" />
+		<Style TargetType="FrameworkElement" x:Key="center">
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+	</Window.Resources>
+	<DockPanel>
+		<Grid DockPanel.Dock="Bottom">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0" Style="{StaticResource margin}" Click="Refresh_Click">Refresh</Button>
+			<Button Grid.Column="1" Style="{StaticResource margin}" Click="More_Click">More</Button>
+			<Button Grid.Column="2" Style="{StaticResource margin}" Click="SetTags_Click">Set tags</Button>
+		</Grid>
+		<DataGrid Name="questionsGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" HeadersVisibility="Column" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" IsReadOnly="True">
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="Title" Width="3*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock TextWrapping="Wrap" Style="{StaticResource center}">
+								<Hyperlink NavigateUri="{Binding Id, Converter={StaticResource idToUrl}}">
+									<Run Text="{Binding Title}" />
+								</Hyperlink>
+							</TextBlock>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="Answers" Binding="{Binding AnswerCount}">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="FrameworkElement" BasedOn="{StaticResource center}">
+							<Setter Property="HorizontalAlignment" Value="Center" />
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
+				<DataGridTextColumn Header="Created" Binding="{Binding CreationDate}" ElementStyle="{StaticResource center}" />
+				<DataGridTemplateColumn Header="Tags" Width="2*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ListView DataContext="{Binding Tags}" ItemsSource="{Binding}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Style="{StaticResource center}">
+								<ListView.ItemsPanel>
+									<ItemsPanelTemplate>
+										<WrapPanel />
+									</ItemsPanelTemplate>
+								</ListView.ItemsPanel>
+							</ListView>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+	</DockPanel>
+</Window>
