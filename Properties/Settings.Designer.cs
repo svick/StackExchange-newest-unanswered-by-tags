@@ -22,5 +22,40 @@ namespace Newest_unaswered_by_tags.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Tags {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Tags"]));
+            }
+            set {
+                this["Tags"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int MaxPagesToLoad {
+            get {
+                return ((int)(this["MaxPagesToLoad"]));
+            }
+            set {
+                this["MaxPagesToLoad"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("StackOverflow")]
+        public global::StackOverflow.HostSite Site {
+            get {
+                return ((global::StackOverflow.HostSite)(this["Site"]));
+            }
+            set {
+                this["Site"] = value;
+            }
+        }
     }
 }

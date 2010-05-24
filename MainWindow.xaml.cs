@@ -12,8 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
-
 using StackOverflow;
+using System.Threading.Tasks;
+using Newest_unaswered_by_tags.Properties;
 
 namespace Newest_unaswered_by_tags
 {
@@ -22,25 +23,6 @@ namespace Newest_unaswered_by_tags
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		const string fileName = "tags.txt";
-
-		string[] tags = new string[0];
-		string[] Tags
-		{
-			get
-			{
-				return tags;
-			}
-			set
-			{
-				if (value == null)
-					tags = new string[0];
-				else
-					tags = value;
-				File.WriteAllLines(fileName, tags);
-			}
-		}
-
 		List<Question> questions = new List<Question>(10);
 		StackOverflowClient client;
 		int nextPage = 1;
@@ -49,8 +31,11 @@ namespace Newest_unaswered_by_tags
 		{
 			InitializeComponent();
 
-			if (File.Exists(fileName))
-				Tags = File.ReadAllLines(fileName);
+			if (Settings.Default.Tags == null)
+			{
+				Settings.Default.Tags = new System.Collections.Specialized.StringCollection();
+				Settings.Default.Save();
+			}
 
 			IUrlClient urlClient = new UrlClient();
 			IProtocol protocol = new JsonProtocol();
@@ -74,22 +59,36 @@ namespace Newest_unaswered_by_tags
 		private void SetTags_Click(object sender, RoutedEventArgs e)
 		{
 			SetTagsWindow window = new SetTagsWindow();
-			window.Tags = Tags;
+			window.Tags = Settings.Default.Tags;
 			if (window.ShowDialog() == true)
 			{
-				Tags = window.Tags;
+				Settings.Default.Tags = window.Tags;
+				Settings.Default.Save();
 				Reload();
 			}
 		}
 
 		void LoadNextPage()
 		{
+			StatusBar.Text = "Loading…";
+			Task task = new Task(loadNextPageTask);
+			task.ContinueWith(t => Dispatcher.Invoke((Action)loadNextPageFinished));
+			task.Start();
+		}
+
+		void loadNextPageTask()
+		{
 			int oldCount = questions.Count;
 			do
 			{
 				questions.AddRange(getQuestions(nextPage++));
-				questionsGrid.Items.Refresh();
 			} while (questions.Count == oldCount);
+		}
+
+		void loadNextPageFinished()
+		{
+			questionsGrid.Items.Refresh();
+			StatusBar.Text = "";
 		}
 
 		void Reload()
@@ -106,8 +105,10 @@ namespace Newest_unaswered_by_tags
 				pageSize: 100,
 				page: page);
 
-			if (Tags.Any())
-				questions = questions.Where(q => q.Tags.Any(tag => Tags.Contains(tag)));
+			var tags = Settings.Default.Tags.Cast<string>().ToArray();
+
+			if (tags.Any())
+				questions = questions.Where(q => q.Tags.Any(tag => tags.Contains(tag)));
 
 			return questions;
 		}

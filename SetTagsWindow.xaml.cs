@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Collections.Specialized;
 
 namespace Newest_unaswered_by_tags
 {
@@ -23,7 +24,7 @@ namespace Newest_unaswered_by_tags
 			InitializeComponent();
 		}
 
-		public string[] Tags
+		public StringCollection Tags
 		{
 			get;
 			set;
@@ -31,7 +32,9 @@ namespace Newest_unaswered_by_tags
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
-			Tags = tagsTextBox.Text.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+			Tags.Clear();
+			Tags.AddRange(tagsTextBox.Text.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+
 			DialogResult = true;
 		}
 
@@ -42,8 +45,7 @@ namespace Newest_unaswered_by_tags
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			if (Tags != null)
-				tagsTextBox.Text = string.Join(" ", Tags);
+			tagsTextBox.Text = string.Join(" ", Tags.Cast<string>());
 		}
 	}
 }

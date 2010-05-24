@@ -11,6 +11,7 @@
 		</Style>
 	</Window.Resources>
 	<DockPanel>
+		<TextBlock Name="StatusBar" DockPanel.Dock="Bottom" Style="{StaticResource margin}" />
 		<Grid DockPanel.Dock="Bottom">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
@@ -21,7 +22,7 @@
 			<Button Grid.Column="1" Style="{StaticResource margin}" Click="More_Click">More</Button>
 			<Button Grid.Column="2" Style="{StaticResource margin}" Click="SetTags_Click">Set tags</Button>
 		</Grid>
-		<DataGrid Name="questionsGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" HeadersVisibility="Column" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" IsReadOnly="True">
+		<DataGrid Name="questionsGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" HeadersVisibility="Column" RowHeaderWidth="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" IsReadOnly="True">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Title" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
