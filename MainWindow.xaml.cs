@@ -58,7 +58,7 @@ namespace Newest_unaswered_by_tags
 
 		private void SetTags_Click(object sender, RoutedEventArgs e)
 		{
-			SetTagsWindow window = new SetTagsWindow();
+			SettingsWindow window = new SettingsWindow();
 			window.Tags = Settings.Default.Tags;
 			if (window.ShowDialog() == true)
 			{

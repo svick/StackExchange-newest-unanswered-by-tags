@@ -1,7 +1,7 @@
-﻿<Window x:Class="Newest_unaswered_by_tags.SetTagsWindow"
+﻿<Window x:Class="Newest_unaswered_by_tags.SettingsWindow"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	Title="Set Tags" SizeToContent="Height" Loaded="Window_Loaded" Width="250">
+	Title="Settings" SizeToContent="Height" Loaded="Window_Loaded" Width="250">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />

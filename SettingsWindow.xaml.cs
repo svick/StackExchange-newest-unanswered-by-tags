@@ -17,9 +17,9 @@ namespace Newest_unaswered_by_tags
 	/// <summary>
 	/// Interaction logic for SetTagsWindow.xaml
 	/// </summary>
-	public partial class SetTagsWindow : Window
+	public partial class SettingsWindow : Window
 	{
-		public SetTagsWindow()
+		public SettingsWindow()
 		{
 			InitializeComponent();
 		}
