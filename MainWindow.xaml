@@ -5,6 +5,7 @@
   Title="Newest unaswered by tags" Height="400" Width="600">
 	<Window.Resources>
 		<local:IdToUrlConverter x:Key="idToUrl" />
+		<local:EnumerableToStringConverter x:Key="enumerableToString" />
 		<Style TargetType="FrameworkElement" x:Key="center">
 			<Setter Property="VerticalAlignment" Value="Center" />
 		</Style>
@@ -44,13 +45,7 @@
 				<DataGridTemplateColumn Header="Tags" Width="2*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ListView DataContext="{Binding Tags}" ItemsSource="{Binding}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Style="{StaticResource center}">
-								<ListView.ItemsPanel>
-									<ItemsPanelTemplate>
-										<WrapPanel />
-									</ItemsPanelTemplate>
-								</ListView.ItemsPanel>
-							</ListView>
+							<TextBlock TextWrapping="Wrap" Style="{StaticResource center}" Text="{Binding Tags, Converter={StaticResource enumerableToString}}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

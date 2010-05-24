@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Navigation;
 using System.Diagnostics;
 using System.Windows.Data;
+using System.Collections;
 
 namespace Newest_unaswered_by_tags
 {
@@ -41,4 +42,19 @@ namespace Newest_unaswered_by_tags
 			return null;
 		}
 	}
+
+	[ValueConversion(typeof(IEnumerable<object>), typeof(string))]
+	public class EnumerableToStringConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			return string.Join(" ", ((IEnumerable<object>)value).Select(o => o.ToString()));
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			return null;
+		}
+	}
+
 }
