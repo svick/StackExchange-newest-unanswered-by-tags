@@ -79,9 +79,12 @@ namespace Newest_unaswered_by_tags
 		void loadNextPageTask()
 		{
 			int oldCount = questions.Count;
+			int i = 0;
 			do
 			{
 				questions.AddRange(getQuestions(nextPage++));
+				if (++i >= Settings.Default.MaxPagesToLoad)
+					break;
 			} while (questions.Count == oldCount);
 		}
 
