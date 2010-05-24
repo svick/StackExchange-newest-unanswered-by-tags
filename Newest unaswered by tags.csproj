@@ -98,7 +98,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\trunk\StackOverflow.Net\StackOverflow.Net.csproj">
+    <ProjectReference Include="..\StackOverflow.Net\StackOverflow.Net\StackOverflow.Net.csproj">
       <Project>{75211821-4261-4FA1-8768-D266248512CA}</Project>
       <Name>StackOverflow.Net</Name>
     </ProjectReference>
