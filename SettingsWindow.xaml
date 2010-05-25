@@ -34,7 +34,7 @@
 			<TextBlock Style="{StaticResource label}" Grid.Row="2" Grid.Column="0">Max. pages to load</TextBlock>
 			<TextBox Style="{StaticResource margin}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Name="maxPagesToLoadTextBox" Width="100" />
 		</Grid>
-		<Button Grid.Column="0" Grid.Row="1" Style="{StaticResource margin}" Click="Ok_Click">OK</Button>
-		<Button Grid.Column="1" Grid.Row="1" Style="{StaticResource margin}" Click="Cancel_Click">Cancel</Button>
+		<Button Grid.Column="0" Grid.Row="1" Style="{StaticResource margin}" Click="Ok_Click" IsDefault="True">OK</Button>
+		<Button Grid.Column="1" Grid.Row="1" Style="{StaticResource margin}" Click="Cancel_Click" IsCancel="True">Cancel</Button>
 	</Grid>
 </Window>
