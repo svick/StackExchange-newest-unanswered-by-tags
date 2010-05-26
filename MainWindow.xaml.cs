@@ -76,8 +76,14 @@ namespace Newest_unaswered_by_tags
 		{
 			StatusBar.Text = "Loading…";
 			Task task = new Task(loadNextPageTask);
-			task.ContinueWith(t => Dispatcher.Invoke((Action)loadNextPageFinished));
+			task.ContinueWith(handleTaskException, TaskContinuationOptions.OnlyOnFaulted);
+			task.ContinueWith(t => Dispatcher.Invoke((Action)loadNextPageFinished), TaskContinuationOptions.NotOnFaulted);
 			task.Start();
+		}
+
+		void handleTaskException(Task task)
+		{
+			Dispatcher.Invoke((Action<Exception>)ShowException, task.Exception);
 		}
 
 		void loadNextPageTask()
@@ -118,6 +124,13 @@ namespace Newest_unaswered_by_tags
 				questions = questions.Where(q => q.Tags.Any(tag => tags.Contains(tag)));
 
 			return questions;
+		}
+
+		public void ShowException(Exception ex)
+		{
+			while (ex.InnerException != null)
+				ex = ex.InnerException;
+			StatusBar.Text = ex.Message;
 		}
 	}
 }

@@ -25,6 +25,12 @@ namespace Newest_unaswered_by_tags
 		{
 			Process.Start(e.Uri.ToString());
 		}
+
+		private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+		{
+			Exception ex = e.Exception;
+			((MainWindow)MainWindow).ShowException(ex);
+		}
 	}
 
 	[ValueConversion(typeof(long), typeof(Uri))]
