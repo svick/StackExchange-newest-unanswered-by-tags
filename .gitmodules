@@ -1,0 +1,3 @@
+[submodule "StackOverflow.Net"]
+	path = StackOverflow.Net
+	url = git://github.com/svick/StackOverflow.Net.git
