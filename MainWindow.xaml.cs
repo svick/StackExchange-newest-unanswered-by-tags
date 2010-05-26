@@ -107,7 +107,7 @@ namespace Newest_unaswered_by_tags
 
 		IEnumerable<Question> getQuestions(int page)
 		{
-			var questions = client.GetQuestions(
+			IEnumerable<Question> questions = client.GetQuestions(
 				sortBy: QuestionSort.UnansweredNewest,
 				pageSize: 100,
 				page: page);
