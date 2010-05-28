@@ -61,7 +61,7 @@ namespace Newest_unaswered_by_tags
 			LoadNextPage();
 		}
 
-		private void SetTags_Click(object sender, RoutedEventArgs e)
+		private void Settings_Click(object sender, RoutedEventArgs e)
 		{
 			SettingsWindow window = new SettingsWindow();
 			window.Tags = Settings.Default.Tags;
