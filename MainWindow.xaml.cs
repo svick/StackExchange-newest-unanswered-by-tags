@@ -42,8 +42,13 @@ namespace Newest_unaswered_by_tags
 
 			DataContext = questions;
 
-			client = new StackOverflowClient("0.8", null, HostSite.StackOverflow, urlClient, protocol);
+			client = createNewClient(Settings.Default.Site);
 			LoadNextPage();
+		}
+
+		StackOverflowClient createNewClient(HostSite site)
+		{
+			return new StackOverflowClient("0.8", null, site, new UrlClient(), new JsonProtocol());
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
@@ -68,6 +73,7 @@ namespace Newest_unaswered_by_tags
 				Settings.Default.Site = window.Site;
 				Settings.Default.MaxPagesToLoad = window.MaxPagesToLoad;
 				Settings.Default.Save();
+				client = createNewClient(Settings.Default.Site);
 				Reload();
 			}
 		}
