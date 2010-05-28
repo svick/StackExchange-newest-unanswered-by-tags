@@ -8,6 +8,8 @@ using System.Windows.Navigation;
 using System.Diagnostics;
 using System.Windows.Data;
 using System.Collections;
+using Newest_unaswered_by_tags.Properties;
+using StackOverflow;
 
 namespace Newest_unaswered_by_tags
 {
@@ -40,7 +42,14 @@ namespace Newest_unaswered_by_tags
 		{
 			long id = (long)value;
 
-			return new Uri("http://stackoverflow.com/questions/" + id.ToString());
+			string domain;
+			if (Settings.Default.Site == StackOverflow.HostSite.Meta)
+				domain = "meta.stackoverflow.com";
+			else
+				domain = Settings.Default.Site.ToString();
+
+
+			return new Uri("http://" + Settings.Default.Site.GetAddress().Replace("api.", "") + "/questions/" + id.ToString());
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
