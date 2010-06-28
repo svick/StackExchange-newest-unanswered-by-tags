@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Newest unanswered by tags", "Newest unanswered by tags.csproj", "{F3C82C94-C8DF-47CC-9F8D-1CE2BDA69CD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stacky", "StackOverflow.Net\trunk\source\Stacky\Stacky.csproj", "{76872B7B-53CE-41E1-B41C-8F0BEC5455D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stacky", "Stacky\trunk\source\Stacky\Stacky.csproj", "{76872B7B-53CE-41E1-B41C-8F0BEC5455D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
