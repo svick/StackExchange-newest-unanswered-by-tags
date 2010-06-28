@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Collections.Specialized;
+using Stacky;
 
 namespace Newest_unaswered_by_tags
 {
@@ -24,7 +25,7 @@ namespace Newest_unaswered_by_tags
 			InitializeComponent();
 		}
 
-		public StackOverflow.HostSite Site
+		public Site Site
 		{
 			get;
 			set;
@@ -50,7 +51,7 @@ namespace Newest_unaswered_by_tags
 			Tags.Clear();
 			Tags.AddRange(tagsTextBox.Text.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
 
-			Site = (StackOverflow.HostSite)siteComboBox.SelectedItem;
+			Site = (Site)siteComboBox.SelectedItem;
 
 			int pages;
 			if (int.TryParse(maxPagesToLoadTextBox.Text, out pages))
@@ -66,7 +67,7 @@ namespace Newest_unaswered_by_tags
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			siteComboBox.ItemsSource = Enum.GetValues(typeof(StackOverflow.HostSite));
+			siteComboBox.ItemsSource = StackySite.GetSites();
 			siteComboBox.SelectedItem = Site;
 
 			tagsTextBox.Text = string.Join(" ", Tags.Cast<string>());

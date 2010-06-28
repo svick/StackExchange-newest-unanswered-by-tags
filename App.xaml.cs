@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Windows.Data;
 using System.Collections;
 using Newest_unaswered_by_tags.Properties;
-using StackOverflow;
+using Stacky;
 
 namespace Newest_unaswered_by_tags
 {
@@ -40,16 +40,9 @@ namespace Newest_unaswered_by_tags
 	{
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			long id = (long)value;
+			int id = (int)value;
 
-			string domain;
-			if (Settings.Default.Site == StackOverflow.HostSite.Meta)
-				domain = "meta.stackoverflow.com";
-			else
-				domain = Settings.Default.Site.ToString();
-
-
-			return new Uri("http://" + Settings.Default.Site.GetAddress().Replace("api.", "") + "/questions/" + id.ToString());
+			return new Uri(StackySite.GetSite(Settings.Default.Site).SiteUrl + "/questions/" + id.ToString());
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

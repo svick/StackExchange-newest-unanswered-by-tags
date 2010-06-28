@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
-using StackOverflow;
+using Stacky;
 using System.Threading.Tasks;
 using Newest_unaswered_by_tags.Properties;
 
@@ -24,7 +24,7 @@ namespace Newest_unaswered_by_tags
 	public partial class MainWindow : Window
 	{
 		List<Question> questions = new List<Question>(10);
-		StackOverflowClient client;
+		StackyClient client;
 		int nextPage = 1;
 
 		public MainWindow()
@@ -42,13 +42,20 @@ namespace Newest_unaswered_by_tags
 
 			DataContext = questions;
 
-			client = createNewClient(Settings.Default.Site);
+			Site site = StackySite.GetSite(Settings.Default.Site);
+			if (site == null)
+			{
+				site = Sites.StackOverflow;
+				Settings.Default.Site = site.Name;
+			}
+
+			client = createNewClient(site);
 			LoadNextPage();
 		}
 
-		StackOverflowClient createNewClient(HostSite site)
+		StackyClient createNewClient(Site site)
 		{
-			return new StackOverflowClient("0.8", null, site, new UrlClient(), new JsonProtocol());
+			return new StackyClient("0.9", null, site, new UrlClient(), new JsonProtocol());
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
@@ -65,15 +72,15 @@ namespace Newest_unaswered_by_tags
 		{
 			SettingsWindow window = new SettingsWindow();
 			window.Tags = Settings.Default.Tags;
-			window.Site = Settings.Default.Site;
+			window.Site = StackySite.GetSite(Settings.Default.Site);
 			window.MaxPagesToLoad = Settings.Default.MaxPagesToLoad;
 			if (window.ShowDialog() == true)
 			{
 				Settings.Default.Tags = window.Tags;
-				Settings.Default.Site = window.Site;
+				Settings.Default.Site = window.Site.Name;
 				Settings.Default.MaxPagesToLoad = window.MaxPagesToLoad;
 				Settings.Default.Save();
-				client = createNewClient(Settings.Default.Site);
+				client = createNewClient(window.Site);
 				Reload();
 			}
 		}
@@ -120,7 +127,7 @@ namespace Newest_unaswered_by_tags
 		IEnumerable<Question> getQuestions(int page)
 		{
 			IEnumerable<Question> questions = client.GetQuestions(
-				sortBy: QuestionSort.UnansweredNewest,
+				sortBy: QuestionSort.UnansweredCreation,
 				pageSize: 100,
 				page: page);
 
