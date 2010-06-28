@@ -1,3 +1,3 @@
-[submodule "StackOverflow.Net"]
-	path = StackOverflow.Net
-	url = git://github.com/svick/StackOverflow.Net.git
+[submodule "Stacky"]
+	path = Stacky
+	url = git://github.com/svick/stacky.git
