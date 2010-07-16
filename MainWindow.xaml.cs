@@ -55,7 +55,7 @@ namespace Newest_unaswered_by_tags
 
 		StackyClient createNewClient(Site site)
 		{
-			return new StackyClient("0.9", null, site, new UrlClient(), new JsonProtocol());
+			return new StackyClient("1.0", null, site, new UrlClient(), new JsonProtocol());
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
