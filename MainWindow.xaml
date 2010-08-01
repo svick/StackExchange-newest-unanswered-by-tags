@@ -32,6 +32,7 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
+				<DataGridTextColumn Header="Score" Binding="{Binding Score}" ElementStyle="{StaticResource centerCenter}" />
 				<DataGridTextColumn Header="Answers" Binding="{Binding AnswerCount}" ElementStyle="{StaticResource centerCenter}" />
 				<DataGridTextColumn Header="Created" Binding="{Binding CreationDate}" ElementStyle="{StaticResource center}" />
 				<DataGridTemplateColumn Header="Tags" Width="2*">
