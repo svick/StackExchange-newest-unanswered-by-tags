@@ -20,6 +20,11 @@
 			<Button Grid.Column="2" Style="{StaticResource margin}" Click="Settings_Click">Settings</Button>
 		</Grid>
 		<DataGrid Name="questionsGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" HeadersVisibility="Column" RowHeaderWidth="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Center" IsReadOnly="True">
+			<DataGrid.CellStyle>
+				<Style TargetType="DataGridCell">
+					<Setter Property="BorderThickness" Value="0" />
+				</Style>
+			</DataGrid.CellStyle>
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Title" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
