@@ -25,12 +25,22 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<TextBlock TextWrapping="Wrap" Style="{StaticResource center}">
-								<Hyperlink NavigateUri="{Binding Id, Converter={StaticResource idToUrl}}">
-									<Run Text="{Binding Title}" />
+								<Hyperlink NavigateUri="{Binding Id, Converter={StaticResource idToUrl}}" >
+									<Run Text="{Binding Title}" Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridCell}, Path=Foreground}" />
 								</Hyperlink>
 							</TextBlock>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
+					<DataGridTemplateColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="TextElement.Foreground" Value="Blue" />
+							<Style.Triggers>
+								<Trigger Property="IsSelected" Value="True">
+									<Setter Property="TextElement.Foreground" Value="White" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</DataGridTemplateColumn.CellStyle>
 				</DataGridTemplateColumn>
 				<DataGridTextColumn Header="Score" Binding="{Binding Score}" ElementStyle="{StaticResource centerCenter}" />
 				<DataGridTextColumn Header="Answers" Binding="{Binding AnswerCount}" ElementStyle="{StaticResource centerCenter}" />
