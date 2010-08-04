@@ -29,7 +29,7 @@
 				<DataGridTemplateColumn Header="Title" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock TextWrapping="Wrap" Style="{StaticResource center}">
+							<TextBlock TextWrapping="Wrap" Style="{StaticResource gridContent}">
 								<Hyperlink NavigateUri="{Binding Id, Converter={StaticResource idToUrl}}" >
 									<Run Text="{Binding Title}" Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridCell}, Path=Foreground}" />
 								</Hyperlink>
@@ -47,13 +47,13 @@
 						</Style>
 					</DataGridTemplateColumn.CellStyle>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Header="Score" Binding="{Binding Score}" ElementStyle="{StaticResource centerCenter}" />
-				<DataGridTextColumn Header="Answers" Binding="{Binding AnswerCount}" ElementStyle="{StaticResource centerCenter}" />
-				<DataGridTextColumn Header="Created" Binding="{Binding CreationDate}" ElementStyle="{StaticResource center}" />
+				<DataGridTextColumn Header="Score" Binding="{Binding Score}" ElementStyle="{StaticResource gridContentCenter}" />
+				<DataGridTextColumn Header="Answers" Binding="{Binding AnswerCount}" ElementStyle="{StaticResource gridContentCenter}" />
+				<DataGridTextColumn Header="Created" Binding="{Binding CreationDate}" ElementStyle="{StaticResource gridContent}" />
 				<DataGridTemplateColumn Header="Tags" Width="2*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<TextBlock TextWrapping="Wrap" Style="{StaticResource center}" Text="{Binding Tags, Converter={StaticResource enumerableToString}}" />
+							<TextBlock TextWrapping="Wrap" Style="{StaticResource gridContent}" Text="{Binding Tags, Converter={StaticResource enumerableToString}}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

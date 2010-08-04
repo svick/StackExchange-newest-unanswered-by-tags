@@ -9,11 +9,11 @@
 		<Style TargetType="FrameworkElement" x:Key="margin">
 			<Setter Property="Margin" Value="5" />
 		</Style>
-		<Style TargetType="FrameworkElement" x:Key="center">
+		<Style TargetType="FrameworkElement" x:Key="gridContent">
 			<Setter Property="VerticalAlignment" Value="Center" />
 			<Setter Property="Margin" Value="3" />
 		</Style>
-		<Style TargetType="FrameworkElement" x:Key="centerCenter" BasedOn="{StaticResource center}">
+		<Style TargetType="FrameworkElement" x:Key="gridContentCenter" BasedOn="{StaticResource gridContent}">
 			<Setter Property="HorizontalAlignment" Value="Center" />
 		</Style>
 	</Application.Resources>
