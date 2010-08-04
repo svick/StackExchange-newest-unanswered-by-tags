@@ -30,7 +30,7 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<TextBlock TextWrapping="Wrap" Style="{StaticResource gridContent}">
-								<Hyperlink NavigateUri="{Binding Id, Converter={StaticResource idToUrl}}" >
+								<Hyperlink NavigateUri="{Binding Id, Converter={StaticResource idToUrl}}" Focusable="False">
 									<Run Text="{Binding Title}" Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridCell}, Path=Foreground}" />
 								</Hyperlink>
 							</TextBlock>
