@@ -16,5 +16,8 @@
 		<Style TargetType="FrameworkElement" x:Key="gridContentCenter" BasedOn="{StaticResource gridContent}">
 			<Setter Property="HorizontalAlignment" Value="Center" />
 		</Style>
+		<Style TargetType="DataGridCell" x:Key="cellStyle">
+			<Setter Property="BorderThickness" Value="0" />
+		</Style>
 	</Application.Resources>
 </Application>
