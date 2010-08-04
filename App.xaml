@@ -11,6 +11,7 @@
 		</Style>
 		<Style TargetType="FrameworkElement" x:Key="center">
 			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Margin" Value="3" />
 		</Style>
 		<Style TargetType="FrameworkElement" x:Key="centerCenter" BasedOn="{StaticResource center}">
 			<Setter Property="HorizontalAlignment" Value="Center" />
