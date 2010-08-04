@@ -39,6 +39,7 @@
 					<DataGridTemplateColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="TextElement.Foreground" Value="Blue" />
+							<Setter Property="BorderThickness" Value="0" />
 							<Style.Triggers>
 								<Trigger Property="IsSelected" Value="True">
 									<Setter Property="TextElement.Foreground" Value="White" />
