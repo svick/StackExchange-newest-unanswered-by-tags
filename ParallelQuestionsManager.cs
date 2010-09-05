@@ -28,6 +28,13 @@ namespace Newest_unaswered_by_tags
 				lastScheduledTask = Task.Factory.StartNew(action, tokenSource.Token);
 			else
 				lastScheduledTask = lastScheduledTask.ContinueWith(_ => action(), tokenSource.Token);
+
+			lastScheduledTask = lastScheduledTask.ContinueWith(handleExceptions, TaskContinuationOptions.OnlyOnFaulted);
+		}
+
+		void handleExceptions(Task task)
+		{
+			showException(task.Exception.InnerExceptions[0]);
 		}
 
 		void cancelTasks()

@@ -63,7 +63,7 @@ namespace Newest_unaswered_by_tags
 		{
 			while (ex.InnerException != null)
 				ex = ex.InnerException;
-			StatusBar.Text = ex.Message;
+			Dispatcher.Invoke((Action)(() => StatusBar.Text = ex.Message));
 		}
 	}
 }
