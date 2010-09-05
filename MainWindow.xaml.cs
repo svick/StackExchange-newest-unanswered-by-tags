@@ -1,46 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
-using Stacky;
 using System.Threading.Tasks;
+using System.Windows;
 using Newest_unaswered_by_tags.Properties;
+using Stacky;
 
 namespace Newest_unaswered_by_tags
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
-		List<Question> questions = new List<Question>(10);
-		StackyClient client;
-		int nextPage = 1;
+		QuestionsManager manager;
+		Question[] questions = new Question[0];
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			if (Settings.Default.Tags == null)
-			{
 				Settings.Default.Tags = new System.Collections.Specialized.StringCollection();
-				Settings.Default.Save();
-			}
-
-			IUrlClient urlClient = new UrlClient();
-			IProtocol protocol = new JsonProtocol();
-
-			DataContext = questions;
 
 			Site site = StackySite.GetSite(Settings.Default.Site);
 			if (site == null)
@@ -49,23 +27,27 @@ namespace Newest_unaswered_by_tags
 				Settings.Default.Site = site.Name;
 			}
 
-			client = createNewClient(site);
-			LoadNextPage();
+			manager = new ParallelQuestionsManager(site, Settings.Default.Tags.Cast<string>());
+			DataContext = questions;
+			manager.QuestionsChanged += new EventHandler(manager_QuestionsChanged);
+			manager.ExceptionOcurred += new EventHandler<ExceptionEventArgs>((_, e) => ShowException(e.Exception));
 		}
 
-		StackyClient createNewClient(Site site)
+		void manager_QuestionsChanged(object sender, EventArgs e)
 		{
-			return new StackyClient("1.0", null, site, new UrlClient(), new JsonProtocol());
+			questions = manager.Questions.ToArray();
+			Dispatcher.Invoke((Action)(()  =>
+			{
+				DataContext = questions;
+			}));
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
 		{
-			Reload();
 		}
 
 		private void More_Click(object sender, RoutedEventArgs e)
 		{
-			LoadNextPage();
 		}
 
 		private void Settings_Click(object sender, RoutedEventArgs e)
@@ -80,63 +62,9 @@ namespace Newest_unaswered_by_tags
 				Settings.Default.Site = window.Site.Name;
 				Settings.Default.MaxPagesToLoad = window.MaxPagesToLoad;
 				Settings.Default.Save();
-				client = createNewClient(window.Site);
-				Reload();
+				manager.Tags = window.Tags.Cast<string>();
+				manager.Site = window.Site;
 			}
-		}
-
-		void LoadNextPage()
-		{
-			StatusBar.Text = "Loading…";
-			Task task = new Task(loadNextPageTask);
-			task.ContinueWith(handleTaskException, TaskContinuationOptions.OnlyOnFaulted);
-			task.ContinueWith(t => Dispatcher.Invoke((Action)loadNextPageFinished), TaskContinuationOptions.NotOnFaulted);
-			task.Start();
-		}
-
-		void handleTaskException(Task task)
-		{
-			Dispatcher.Invoke((Action<Exception>)ShowException, task.Exception);
-		}
-
-		void loadNextPageTask()
-		{
-			int oldCount = questions.Count;
-			int i = 0;
-			do
-			{
-				questions.AddRange(getQuestions(nextPage++));
-				if (++i >= Settings.Default.MaxPagesToLoad)
-					break;
-			} while (questions.Count == oldCount);
-		}
-
-		void loadNextPageFinished()
-		{
-			questionsGrid.Items.Refresh();
-			StatusBar.Text = "";
-		}
-
-		void Reload()
-		{
-			questions.Clear();
-			nextPage = 1;
-			LoadNextPage();
-		}
-
-		IEnumerable<Question> getQuestions(int page)
-		{
-			IEnumerable<Question> questions = client.GetQuestions(
-				sortBy: QuestionSort.UnansweredCreation,
-				pageSize: 100,
-				page: page);
-
-			var tags = Settings.Default.Tags.Cast<string>().ToArray();
-
-			if (tags.Any())
-				questions = questions.Where(q => q.Tags.Any(tag => tags.Contains(tag)));
-
-			return questions;
 		}
 
 		public void ShowException(Exception ex)
