@@ -11,7 +11,6 @@ namespace Newest_unaswered_by_tags
 	public partial class MainWindow : Window
 	{
 		QuestionsManager manager;
-		Question[] questions = new Question[0];
 
 		public MainWindow()
 		{
@@ -28,18 +27,14 @@ namespace Newest_unaswered_by_tags
 			}
 
 			manager = new ParallelQuestionsManager(site, Settings.Default.Tags.Cast<string>());
-			DataContext = questions;
+			DataContext = manager.Questions;
 			manager.QuestionsChanged += new EventHandler(manager_QuestionsChanged);
 			manager.ExceptionOcurred += new EventHandler<ExceptionEventArgs>((_, e) => ShowException(e.Exception));
 		}
 
 		void manager_QuestionsChanged(object sender, EventArgs e)
 		{
-			questions = manager.Questions.ToArray();
-			Dispatcher.Invoke((Action)(()  =>
-			{
-				DataContext = questions;
-			}));
+			Dispatcher.Invoke((Action)questionsGrid.Items.Refresh);
 		}
 
 		private void Refresh_Click(object sender, RoutedEventArgs e)
