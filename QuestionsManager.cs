@@ -57,7 +57,7 @@ namespace Newest_unaswered_by_tags
 		void setSite(Site value)
 		{
 			site = value;
-			client = new StackyClient("1.0", null, site, new UrlClient(), new JsonProtocol());
+			client = new StackyClient("1.0", "P2aPrA4wOEiskh8pVm1UKg", site, new UrlClient(), new JsonProtocol());
 		}
 
 		HashSet<string> tags;
