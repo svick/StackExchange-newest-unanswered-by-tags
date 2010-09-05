@@ -37,12 +37,9 @@ namespace Newest_unaswered_by_tags
 			Dispatcher.Invoke((Action)questionsGrid.Items.Refresh);
 		}
 
-		private void Refresh_Click(object sender, RoutedEventArgs e)
+		private void Mark_Click(object sender, RoutedEventArgs e)
 		{
-		}
-
-		private void More_Click(object sender, RoutedEventArgs e)
-		{
+			manager.Remove(questionsGrid.SelectedItems.Cast<Question>());
 		}
 
 		private void Settings_Click(object sender, RoutedEventArgs e)

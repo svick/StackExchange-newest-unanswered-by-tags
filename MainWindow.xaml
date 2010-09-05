@@ -13,11 +13,9 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
 				<ColumnDefinition />
-				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
-			<Button Grid.Column="0" Style="{StaticResource margin}" Click="Refresh_Click">Refresh</Button>
-			<Button Grid.Column="1" Style="{StaticResource margin}" Click="More_Click">More</Button>
-			<Button Grid.Column="2" Style="{StaticResource margin}" Click="Settings_Click">Settings</Button>
+			<Button Grid.Column="0" Style="{StaticResource margin}" Click="Mark_Click">Mark selected as uninteresting</Button>
+			<Button Grid.Column="1" Style="{StaticResource margin}" Click="Settings_Click">Settings</Button>
 		</Grid>
 		<DataGrid Name="questionsGrid" ItemsSource="{Binding}" AutoGenerateColumns="False" HeadersVisibility="Column" RowHeaderWidth="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" IsReadOnly="True" CellStyle="{StaticResource cellStyle}">
 			<DataGrid.Columns>

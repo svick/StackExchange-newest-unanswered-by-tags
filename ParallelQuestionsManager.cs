@@ -68,16 +68,6 @@ namespace Newest_unaswered_by_tags
 			}
 		}
 
-		public override void Remove(Question question)
-		{
-			scheduleTask(() => base.Remove(question));
-		}
-
-		public override void Remove(IEnumerable<Question> questionsToRemove)
-		{
-			scheduleTask(() => base.Remove(questionsToRemove));
-		}
-
 		protected override void appendQuestions()
 		{
 			if (appendQuestion())

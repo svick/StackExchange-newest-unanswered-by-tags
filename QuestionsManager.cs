@@ -84,7 +84,7 @@ namespace Newest_unaswered_by_tags
 
 		public QuestionsManager(Site site, IEnumerable<string> tags)
 		{
-			QuestionsToLoad = 20;
+			QuestionsToLoad = 10;
 			setSite(site);
 			setTags(tags);
 		}
@@ -98,7 +98,8 @@ namespace Newest_unaswered_by_tags
 				IEnumerable<Question> questions = client.GetQuestions(
 					sortBy: QuestionSort.UnansweredCreation,
 					pageSize: PageSize,
-					page: page++);
+					page: page++)
+					.Where(q => !questionsToIgnore.Contains(q.Id));
 
 				if (Tags != null && Tags.Any())
 					questions = questions.Where(q => q.Tags.Any(tag => tags.Contains(tag)));
@@ -175,16 +176,24 @@ namespace Newest_unaswered_by_tags
 			}
 		}
 
+		HashSet<int> questionsToIgnore = new HashSet<int>();
+
 		public virtual void Remove(Question question)
 		{
+			questionsToIgnore.Add(question.Id);
 			questions.Remove(question);
+			QuestionsChanged(this, EventArgs.Empty);
 			appendQuestions();
 		}
 
 		public virtual void Remove(IEnumerable<Question> questionsToRemove)
 		{
 			foreach (Question question in questionsToRemove)
-				questions.Remove(question);
+			{
+				questionsToIgnore.Add(question.Id);
+				questions.Remove(questions.Single(q => q.Id == question.Id));
+			}
+			QuestionsChanged(this, EventArgs.Empty);
 			appendQuestions();
 		}
 
