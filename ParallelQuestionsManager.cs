@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Stacky;
 using System.Threading.Tasks;
 using System.Threading;
@@ -12,35 +11,35 @@ namespace Newest_unaswered_by_tags
 	{
 		static readonly TimeSpan RefreshPeriod = TimeSpan.FromMinutes(1);
 
-		Task lastScheduledTask;
-		CancellationTokenSource tokenSource = new CancellationTokenSource();
-		Timer refreshTimer;
+		Task m_lastScheduledTask;
+		CancellationTokenSource m_tokenSource = new CancellationTokenSource();
+		Timer m_refreshTimer;
 
 		public ParallelQuestionsManager(Site site, IEnumerable<string> tags)
 			: base(site, tags)
 		{
-			refreshTimer = new Timer(_ => scheduleTask(processQuestions), null, TimeSpan.Zero, RefreshPeriod);
+			m_refreshTimer = new Timer(_ => ScheduleTask(ProcessQuestions), null, TimeSpan.Zero, RefreshPeriod);
 		}
 
-		void scheduleTask(Action action)
+		void ScheduleTask(Action action)
 		{
-			if (lastScheduledTask == null)
-				lastScheduledTask = Task.Factory.StartNew(action, tokenSource.Token);
+			if (m_lastScheduledTask == null)
+				m_lastScheduledTask = Task.Factory.StartNew(action, m_tokenSource.Token);
 			else
-				lastScheduledTask = lastScheduledTask.ContinueWith(_ => action(), tokenSource.Token);
+				m_lastScheduledTask = m_lastScheduledTask.ContinueWith(_ => action(), m_tokenSource.Token);
 
-			lastScheduledTask = lastScheduledTask.ContinueWith(handleExceptions, TaskContinuationOptions.OnlyOnFaulted);
+			m_lastScheduledTask = m_lastScheduledTask.ContinueWith(HandleExceptions, TaskContinuationOptions.OnlyOnFaulted);
 		}
 
-		void handleExceptions(Task task)
+		void HandleExceptions(Task task)
 		{
-			showException(task.Exception.InnerExceptions[0]);
+			ShowException(task.Exception.InnerExceptions[0]);
 		}
 
-		void cancelTasks()
+		void CancelTasks()
 		{
-			tokenSource.Cancel();
-			tokenSource = new CancellationTokenSource();
+			m_tokenSource.Cancel();
+			m_tokenSource = new CancellationTokenSource();
 		}
 
 		public override Site Site
@@ -53,8 +52,8 @@ namespace Newest_unaswered_by_tags
 			{
 				if (Site != value)
 				{
-					cancelTasks();
-					scheduleTask(() => base.Site = value);
+					CancelTasks();
+					ScheduleTask(() => base.Site = value);
 				}
 			}
 		}
@@ -69,16 +68,16 @@ namespace Newest_unaswered_by_tags
 			{
 				if (Tags == null || value == null || Tags.Count() != value.Count() || Tags.Zip(value, (tag1, tag2) => tag1 == tag2).Any(b => !b))
 				{
-					cancelTasks();
-					scheduleTask(() => base.Tags = value);
+					CancelTasks();
+					ScheduleTask(() => base.Tags = value);
 				}
 			}
 		}
 
-		protected override void appendQuestions()
+		protected override void AppendQuestions()
 		{
-			if (appendQuestion())
-				scheduleTask(appendQuestions);
+			if (AppendQuestion())
+				ScheduleTask(AppendQuestions);
 		}
 	}
 }

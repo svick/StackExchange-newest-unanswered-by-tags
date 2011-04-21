@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Stacky;
 
 namespace Newest_unaswered_by_tags
@@ -24,12 +23,12 @@ namespace Newest_unaswered_by_tags
 	{
 		static readonly int PageSize = 100;
 
-		LinkedList<Question> questions = new LinkedList<Question>();
+	    readonly LinkedList<Question> m_questions = new LinkedList<Question>();
 		public virtual IEnumerable<Question> Questions
 		{
 			get
 			{
-				return questions;
+				return m_questions;
 			}
 		}
 
@@ -39,44 +38,44 @@ namespace Newest_unaswered_by_tags
 			set;
 		}
 
-		StackyClient client;
-		Site site;
+		StackyClient m_client;
+		Site m_site;
 		public virtual Site Site
 		{
 			get
 			{
-				return site;
+				return m_site;
 			}
 			set
 			{
-				setSite(value);
-				reset();
+				SetSite(value);
+				Reset();
 			}
 		}
 
-		void setSite(Site value)
+		void SetSite(Site value)
 		{
-			site = value;
-			client = new StackyClient("1.0", "P2aPrA4wOEiskh8pVm1UKg", site, new UrlClient(), new JsonProtocol());
+			m_site = value;
+			m_client = new StackyClient("1.0", "P2aPrA4wOEiskh8pVm1UKg", m_site, new UrlClient(), new JsonProtocol());
 		}
 
-		HashSet<string> tags;
+		HashSet<string> m_tags;
 		public virtual IEnumerable<string> Tags
 		{
 			get
 			{
-				return tags;
+				return m_tags;
 			}
 			set
 			{
-				setTags(value);
-				reset();
+				SetTags(value);
+				Reset();
 			}
 		}
 
-		void setTags(IEnumerable<string> value)
+		void SetTags(IEnumerable<string> value)
 		{
-			tags = new HashSet<string>(value);
+			m_tags = new HashSet<string>(value);
 		}
 
 		public event EventHandler QuestionsChanged = delegate { };
@@ -85,120 +84,120 @@ namespace Newest_unaswered_by_tags
 		public QuestionsManager(Site site, IEnumerable<string> tags)
 		{
 			QuestionsToLoad = 10;
-			setSite(site);
-			setTags(tags);
+			SetSite(site);
+			SetTags(tags);
 		}
 
 		//what if we reach end?
-		IEnumerable<Question> loadQuestions()
+		IEnumerable<Question> LoadQuestions()
 		{
 			int page = 1;
 			while (true)
 			{
-				IEnumerable<Question> questions = client.GetQuestions(
+				IEnumerable<Question> questions = m_client.GetQuestions(
 					sortBy: QuestionSort.UnansweredCreation,
 					pageSize: PageSize,
 					page: page++)
-					.Where(q => !questionsToIgnore.Contains(q.Id));
+					.Where(q => !m_questionsToIgnore.Contains(q.Id));
 
 				if (Tags != null && Tags.Any())
-					questions = questions.Where(q => q.Tags.Any(tag => tags.Contains(tag)));
+					questions = questions.Where(q => q.Tags.Any(tag => m_tags.Contains(tag)));
 
 				foreach (Question question in questions)
 					yield return question;
 			}
 		}
 
-		IEnumerator<Question> incoming = null;
+		IEnumerator<Question> m_incoming = null;
 
-		//expects that loadQuestions() returns "infinite" sequence
-		protected void processQuestions()
+		//expects that loadQuestions() returns an "infinite" sequence
+		protected void ProcessQuestions()
 		{
-			incoming = loadQuestions().GetEnumerator();
-			incoming.MoveNext();
+			m_incoming = LoadQuestions().GetEnumerator();
+			m_incoming.MoveNext();
 
-			if (questions.Any())
+			if (m_questions.Any())
 			{
-				var current = questions.First;
+				var current = m_questions.First;
 				while (current != null)
 				{
-					if (incoming.Current.Id > current.Value.Id)
+					if (m_incoming.Current.Id > current.Value.Id)
 					{
-						questions.AddBefore(current, incoming.Current);
-						incoming.MoveNext();
+						m_questions.AddBefore(current, m_incoming.Current);
+						m_incoming.MoveNext();
 					}
-					else if (incoming.Current.Id < current.Value.Id)
+					else if (m_incoming.Current.Id < current.Value.Id)
 					{
 						var toDelete = current;
 						current = current.Next;
-						questions.Remove(toDelete);
+						m_questions.Remove(toDelete);
 					}
 					else
 					{
-						current.Value = incoming.Current;
+						current.Value = m_incoming.Current;
 						current = current.Next;
-						incoming.MoveNext();
+						m_incoming.MoveNext();
 					}
 				}
 			}
 
-			appendQuestions();
+			AppendQuestions();
 		}
 
-		protected virtual void appendQuestions()
+		protected virtual void AppendQuestions()
 		{
-			while (appendQuestion())
+			while (AppendQuestion())
 				;
 		}
 
-		protected bool appendQuestion()
+		protected bool AppendQuestion()
 		{
-			if (questions.Count < QuestionsToLoad)
+			if (m_questions.Count < QuestionsToLoad)
 			{
-                if (!questions.Any(q => q.Id == incoming.Current.Id))
-                    questions.AddLast(incoming.Current);
-				incoming.MoveNext();
+                if (!m_questions.Any(q => q.Id == m_incoming.Current.Id))
+                    m_questions.AddLast(m_incoming.Current);
+				m_incoming.MoveNext();
 			}
 
 			QuestionsChanged(this, EventArgs.Empty);
 
-			return questions.Count < QuestionsToLoad;
+			return m_questions.Count < QuestionsToLoad;
 		}
 
-		void reset()
+		void Reset()
 		{
-			questions.Clear();
+			m_questions.Clear();
 
-			if (client != null)
+			if (m_client != null)
 			{
-				incoming = loadQuestions().GetEnumerator();
-				incoming.MoveNext();
-				appendQuestions();
+				m_incoming = LoadQuestions().GetEnumerator();
+				m_incoming.MoveNext();
+				AppendQuestions();
 			}
 		}
 
-		HashSet<int> questionsToIgnore = new HashSet<int>();
+	    readonly HashSet<int> m_questionsToIgnore = new HashSet<int>();
 
 		public virtual void Remove(Question question)
 		{
-			questionsToIgnore.Add(question.Id);
-			questions.Remove(question);
+			m_questionsToIgnore.Add(question.Id);
+			m_questions.Remove(question);
 			QuestionsChanged(this, EventArgs.Empty);
-			appendQuestions();
+			AppendQuestions();
 		}
 
 		public virtual void Remove(IEnumerable<Question> questionsToRemove)
 		{
 			foreach (Question question in questionsToRemove)
 			{
-				questionsToIgnore.Add(question.Id);
-				questions.Remove(questions.Single(q => q.Id == question.Id));
+				m_questionsToIgnore.Add(question.Id);
+				m_questions.Remove(m_questions.Single(q => q.Id == question.Id));
 			}
 			QuestionsChanged(this, EventArgs.Empty);
-			appendQuestions();
+			AppendQuestions();
 		}
 
-		protected void showException(Exception ex)
+		protected void ShowException(Exception ex)
 		{
 			ExceptionOcurred(this, new ExceptionEventArgs(ex));
 		}
