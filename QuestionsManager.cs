@@ -155,7 +155,8 @@ namespace Newest_unaswered_by_tags
 		{
 			if (questions.Count < QuestionsToLoad)
 			{
-				questions.AddLast(incoming.Current);
+                if (!questions.Any(q => q.Id == incoming.Current.Id))
+                    questions.AddLast(incoming.Current);
 				incoming.MoveNext();
 			}
 
