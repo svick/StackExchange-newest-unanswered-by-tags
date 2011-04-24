@@ -198,7 +198,8 @@ namespace Newest_unaswered_by_tags
 			foreach (Question question in questionsToRemove)
 			{
 				m_questionsToIgnore.Add(question.Id);
-				m_questions.Remove(m_questions.Single(q => q.Id == question.Id));
+			    foreach (var questionToDelete in m_questions.Where(q => q.Id == question.Id))
+			        m_questions.Remove(questionToDelete);
 			}
 			QuestionsChanged(this, EventArgs.Empty);
 			AppendQuestions();
