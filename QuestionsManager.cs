@@ -130,7 +130,14 @@ namespace Newest_unaswered_by_tags
 					{
 						var toDelete = current;
 						current = current.Next;
-						m_questions.Remove(toDelete);
+					    try
+					    {
+					        m_questions.Remove(toDelete);
+					    }
+					    catch (InvalidOperationException)
+					    {
+					        // question must have been deleted already
+					    }
 					}
 					else
 					{
