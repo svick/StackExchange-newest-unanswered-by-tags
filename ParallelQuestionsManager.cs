@@ -76,8 +76,11 @@ namespace Newest_unaswered_by_tags
 
 		protected override void AppendQuestions()
 		{
-			if (AppendQuestion())
-				ScheduleTask(AppendQuestions);
+		    ScheduleTask(() =>
+		                 {
+                             if (AppendQuestion())
+                                 AppendQuestions();
+		                 });
 		}
 	}
 }
