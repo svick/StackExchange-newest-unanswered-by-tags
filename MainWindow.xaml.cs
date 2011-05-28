@@ -65,5 +65,10 @@ namespace Newest_unaswered_by_tags
 				ex = ex.InnerException;
 			Dispatcher.Invoke((Action)(() => StatusBar.Text = ex.Message));
 		}
+
+        private void StopOld_Click(object sender, RoutedEventArgs e)
+        {
+            manager.MinDate = manager.Questions.Last().CreationDate;
+        }
 	}
 }

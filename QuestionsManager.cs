@@ -78,6 +78,8 @@ namespace Newest_unaswered_by_tags
 			m_tags = new HashSet<string>(value);
 		}
 
+        public DateTime? MinDate { get; set; }
+
 		public event EventHandler QuestionsChanged = delegate { };
 		public event EventHandler<ExceptionEventArgs> ExceptionOcurred = delegate { };
 
@@ -92,7 +94,8 @@ namespace Newest_unaswered_by_tags
 		IEnumerable<Question> LoadQuestions()
 		{
 			int page = 1;
-			while (true)
+		    bool done = false;
+			while (!done)
 			{
 				IEnumerable<Question> questions = m_client.GetQuestions(
 					sortBy: QuestionSort.UnansweredCreation,
@@ -103,8 +106,15 @@ namespace Newest_unaswered_by_tags
 				if (Tags != null && Tags.Any())
 					questions = questions.Where(q => q.Tags.Any(tag => m_tags.Contains(tag)));
 
-				foreach (Question question in questions)
-					yield return question;
+                foreach (Question question in questions)
+                {
+                    if (MinDate != null && question.CreationDate <= MinDate)
+                    {
+                        done = true;
+                        break;
+                    }
+                    yield return question;
+                }
 			}
 		}
 
@@ -114,7 +124,8 @@ namespace Newest_unaswered_by_tags
 		protected void ProcessQuestions()
 		{
 			m_incoming = LoadQuestions().GetEnumerator();
-			m_incoming.MoveNext();
+            if (!m_incoming.MoveNext())
+                return;
 
 			if (m_questions.Any())
 			{
@@ -124,7 +135,8 @@ namespace Newest_unaswered_by_tags
 					if (m_incoming.Current.Id > current.Value.Id)
 					{
 						m_questions.AddBefore(current, m_incoming.Current);
-						m_incoming.MoveNext();
+                        if (!m_incoming.MoveNext())
+                            break;
 					}
 					else if (m_incoming.Current.Id < current.Value.Id)
 					{
@@ -143,7 +155,8 @@ namespace Newest_unaswered_by_tags
 					{
 						current.Value = m_incoming.Current;
 						current = current.Next;
-						m_incoming.MoveNext();
+                        if (!m_incoming.MoveNext())
+                            break;
 					}
 				}
 			}
@@ -159,16 +172,17 @@ namespace Newest_unaswered_by_tags
 
 		protected bool AppendQuestion()
 		{
+		    bool moreQuestions = true;
 			if (m_questions.Count < QuestionsToLoad)
 			{
-                if (m_incoming.Current != null && !m_questions.Any(q => q.Id == m_incoming.Current.Id))
+                if (m_incoming.Current != null && !m_questions.Any(q => q.Id == m_incoming.Current.Id) && !m_questionsToIgnore.Contains(m_incoming.Current.Id))
                     m_questions.AddLast(m_incoming.Current);
-				m_incoming.MoveNext();
+				moreQuestions = m_incoming.MoveNext();
 			}
 
 			QuestionsChanged(this, EventArgs.Empty);
 
-			return m_questions.Count < QuestionsToLoad;
+		    return m_questions.Count < QuestionsToLoad && moreQuestions;
 		}
 
 		void Reset()
