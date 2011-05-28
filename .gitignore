@@ -2,3 +2,5 @@
 /obj/
 *.suo
 *.Designer.cs
+*.user
+_Resharper*
