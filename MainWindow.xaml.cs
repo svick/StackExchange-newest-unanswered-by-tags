@@ -34,10 +34,16 @@ namespace Newest_unaswered_by_tags
 
 		void manager_QuestionsChanged(object sender, EventArgs e)
 		{
-			Dispatcher.Invoke((Action)questionsGrid.Items.Refresh);
+		    Action action =
+		        () =>
+		        {
+		            questionsGrid.Items.Refresh();
+		            UpdateLayout();
+		        };
+		    Dispatcher.Invoke(action);
 		}
 
-		private void Mark_Click(object sender, RoutedEventArgs e)
+        private void Mark_Click(object sender, RoutedEventArgs e)
 		{
 			manager.Remove(questionsGrid.SelectedItems.Cast<Question>());
 		}
