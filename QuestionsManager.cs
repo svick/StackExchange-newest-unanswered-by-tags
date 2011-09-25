@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Stacky;
 
 namespace Newest_unaswered_by_tags
@@ -23,13 +24,10 @@ namespace Newest_unaswered_by_tags
 	{
 		static readonly int PageSize = 100;
 
-	    readonly LinkedList<Question> m_questions = new LinkedList<Question>();
+	    private readonly LinkedList<Question> m_questions = new LinkedList<Question>();
 		public virtual IEnumerable<Question> Questions
 		{
-			get
-			{
-				return m_questions;
-			}
+			get { return m_questions.ToArray(); }
 		}
 
 		public int QuestionsToLoad
@@ -134,7 +132,7 @@ namespace Newest_unaswered_by_tags
 				{
 					if (m_incoming.Current.Id > current.Value.Id)
 					{
-						m_questions.AddBefore(current, m_incoming.Current);
+                        m_questions.AddBefore(current, m_incoming.Current);
                         if (!m_incoming.MoveNext())
                             break;
 					}
@@ -187,7 +185,7 @@ namespace Newest_unaswered_by_tags
 
 		void Reset()
 		{
-			m_questions.Clear();
+		    m_questions.Clear();
 
 			if (m_client != null)
 			{
@@ -199,23 +197,15 @@ namespace Newest_unaswered_by_tags
 
 	    readonly HashSet<int> m_questionsToIgnore = new HashSet<int>();
 
-		public virtual void Remove(Question question)
-		{
-			m_questionsToIgnore.Add(question.Id);
-			m_questions.Remove(question);
-			QuestionsChanged(this, EventArgs.Empty);
-			AppendQuestions();
-		}
-
-		public virtual void Remove(IEnumerable<Question> questionsToRemove)
+	    public virtual void Remove(IEnumerable<Question> questionsToRemove)
 		{
 			foreach (Question question in questionsToRemove)
 			{
-				m_questionsToIgnore.Add(question.Id);
+			    m_questionsToIgnore.Add(question.Id);
 			    foreach (var questionToDelete in m_questions.Where(q => q.Id == question.Id).ToArray())
 			        m_questions.Remove(questionToDelete);
 			}
-			QuestionsChanged(this, EventArgs.Empty);
+	        QuestionsChanged(this, EventArgs.Empty);
 			AppendQuestions();
 		}
 

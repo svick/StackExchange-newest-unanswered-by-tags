@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Newest_unaswered_by_tags.Properties;
 using Stacky;
@@ -37,8 +35,7 @@ namespace Newest_unaswered_by_tags
 		    Action action =
 		        () =>
 		        {
-		            questionsGrid.Items.Refresh();
-		            UpdateLayout();
+		            DataContext = manager.Questions;
 		        };
 		    Dispatcher.Invoke(action);
 		}
